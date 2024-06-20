@@ -16,7 +16,7 @@ class _ElevationButtonState extends State<ElevationButton> {
   Widget build(BuildContext context) {
     return   ElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>widget.page));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>widget.page));
       },
       style: ElevatedButton.styleFrom(
         fixedSize: const Size(300, 40),

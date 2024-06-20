@@ -1,6 +1,8 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_care_taker_app/views/professional_search_listing_page.dart';
 import 'package:flutter_care_taker_app/views/profile_details.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Constants/colors.dart';
@@ -14,12 +16,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String option = "Doctors";
-  String workcategory = "Surgeon";
-  String worktype = "Day";
-  String experience = "0 - 1 year";
-  String language = "Tamil";
-
+  String option = "";
+  String type = "";
+  String profession = "";
+  String gender = "";
+  List<String> selectedCategories = [];
+  List<String> selectedType = [];
+  List<String> selectedExperience = [];
+  List<String> selectedLanguages = [];
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -35,7 +39,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Image.asset('assets/Ellipse.png'),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 46, left: 295),
+                padding:
+                    EdgeInsets.only(top: height / 16.39, left: width / 1.22),
                 child: Container(
                   width: width / 6.63,
                   height: height / 15.18,
@@ -43,27 +48,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     borderRadius: BorderRadius.circular(40),
                     color: Colors.white,
                   ),
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => NavBar()));
-                      },
-                      icon: Icon(Icons.menu)),
+                  child: Icon(Icons.menu)
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 55, left: 15),
-                child: Text(
-                  'Hello , Bharath',
-                  style: GoogleFonts.openSans(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Color(0xffFFFFFF).withOpacity(.6),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 85, left: 15),
+                padding: EdgeInsets.only(top: 55, left: width / 36),
                 child: Text(
                   'Professionals near you',
                   style: GoogleFonts.openSans(
@@ -75,756 +64,582 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
-          Column(
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 25),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: width / 19.6,
-                      ),
-                      Container(
-                        height: height / 18.97,
-                        width: width / 3.01,
-                        decoration: BoxDecoration(
-                            color: option == "Doctors"
-                                ? primaryColor
-                                : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: height / 31.62,
-                              width: width / 16.33,
-                              child: Image.asset(
-                                'assets/doctor.png',
-                                color: option == "Doctors"
-                                    ? Colors.white
-                                    : Color(0xff2F649A),
-                              ),
-                            ),
-                            // SizedBox(
-                            //   width: width/9.2,
-                            // ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  option = "Doctors";
-                                });
-                              },
-                              child: Text(
-                                'Doctors',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w600,
-                                  color: option == "Doctors"
-                                      ? Colors.white
-                                      : Color(0xff2F649A).withOpacity(.5),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: width / 39.2,
-                      ),
-                      Container(
-                        height: height / 18.97,
-                        width: width / 3.01,
-                        decoration: BoxDecoration(
-                            color: option == "Nurse"
-                                ? primaryColor
-                                : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: height / 31.62,
-                              width: width / 16.33,
-                              child: Image.asset(
-                                'assets/Nurse.png',
-                                color: option == "Nurse"
-                                    ? Colors.white
-                                    : Color(0xff2F649A),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  option = "Nurse";
-                                });
-                              },
-                              child: Text(
-                                'Nurse',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.openSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: option == "Nurse"
-                                      ? Colors.white
-                                      : Color(0xff2F649A).withOpacity(.5),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: width / 39.2,
-                      ),
-                      Container(
-                        height: height / 18.97,
-                        width: width / 3.01,
-                        decoration: BoxDecoration(
-                            color: option == "CareTaker"
-                                ? primaryColor
-                                : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: height / 31.62,
-                              width: width / 16.33,
-                              child: Image.asset(
-                                'assets/Caretaker.png',
-                                color: option == "CareTaker"
-                                    ? Colors.white
-                                    : Color(0xff2F649A),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  option = "CareTaker";
-                                });
-                              },
-                              child: Text(
-                                'CareTaker',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: option == "CareTaker"
-                                      ? Colors.white
-                                      : Color(0xff2F649A).withOpacity(.5),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: width / 39.2,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: height / 37.95,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: width / 19.6,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SearchScreen()));
-                      });
-                    },
-                    child: Container(
-                      height: height / 16.86,
-                      width: width / 1.45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey.shade100,
-                      ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2),
-                            child: Text(
-                              'Search here...',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xff18353F),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 19.6,
-                  ),
-                  Container(
-                    height: height / 15.18,
-                    width: width / 7.84,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Image.asset('assets/Slider.png'),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height / 37.95,
-                width: width / 1.12,
-                child: Divider(
-                  color: Colors.grey.shade300,
-                ),
-              ),
-            ],
+          SizedBox(
+            height: height / 37.7,
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 170),
+            padding: EdgeInsets.only(right: width / 2.25),
+            child: Text('Work Profession',
+                style: GoogleFonts.manrope(
+                    color: Color(0xff18353F),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 16.36),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      profession = "Doctor";
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: profession == "Doctor"
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'Doctor',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: profession == "Doctor"
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      profession = 'Nurse';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: profession == 'Nurse'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'Nurse',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: profession == 'Nurse'
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      profession = 'Care taker';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4,
+                    decoration: BoxDecoration(
+                        color: profession == 'Care taker'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Care taker',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: profession == 'Care taker'
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 16.36),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      profession = 'Physiotherapist';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 3,
+                    decoration: BoxDecoration(
+                        color: profession == 'Physiotherapist'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Physiotherapist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: profession == 'Physiotherapist'
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: height / 25.3,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: width / 2),
             child: Text('Work category',
                 style: GoogleFonts.manrope(
                     color: Color(0xff18353F),
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 15,
-              ),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: width/19.6,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        workcategory = "Surgeon";
-                      });
-                    },
-                    child: Container(
-                      height: height / 18.97,
-                      width: width / 3.01,
-                      decoration: BoxDecoration(
-                          color: workcategory == "Surgeon"
-                              ? primaryColor
-                              : Colors.transparent,
-                          border: Border.all(color: primaryColor),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 7),
-                        child: Text(
-                          'Surgeon',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: workcategory == "Surgeon"
-                                ? Colors.white
-                                : Color(0xff2F649A).withOpacity(.7),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: workcategory == "Cardiologist"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            workcategory = "Cardiologist";
-                          });
-                        },
-                        child: Text(
-                          'Cardiologist',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: workcategory == "Cardiologist"
-                                ? Colors.white
-                                : Color(0xff2F649A).withOpacity(.7),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: workcategory == "Artho"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            workcategory = "Artho";
-                          });
-                        },
-                        child: Text(
-                          'Artho',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: workcategory == "Artho"
-                                ? Colors.white
-                                : Color(0xff2F649A).withOpacity(.7),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: height / 25.3,
-          ),
           Padding(
-            padding: const EdgeInsets.only(right: 220),
-            child: Text('Work type',
-                style: GoogleFonts.manrope(
-                    color: Color(0xff18353F),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 13, right: 47),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: width/19.6,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: worktype == "Day"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            worktype = "Day";
-                          });
-                        },
-                        child: Text(
-                          'Day',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: worktype == "Day"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: worktype == "Night"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            worktype = "Night";
-                          });
-                        },
-                        child: Text(
-                          'Night',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: worktype == "Night"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: worktype == "24 Hours"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            worktype = "24 Hours";
-                          });
-                        },
-                        child: Text(
-                          '24 Hours',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: worktype == "24 Hours"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: height / 25.3,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 155),
-            child: Text('Work experience',
-                style: GoogleFonts.manrope(
-                    color: Color(0xff18353F),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 15,
-              ),
-              child: Row(
-                children: [
-                 SizedBox(
-                   width: width/19.6,
-                 ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: experience == "0 - 1 year"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            experience = "0 - 1 year";
-                          });
-                        },
-                        child: Text(
-                          '0 - 1 year',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: experience == "0 - 1 year"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: experience == "2 - 3 years"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            experience = "2 - 3 years";
-                          });
-                        },
-                        child: Text(
-                          '2 - 3 years',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: experience == "2 - 3 years"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: experience == "3 - 6 years"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            experience = "3 - 6 years";
-                          });
-                        },
-                        child: Text(
-                          '3 - 6 years',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: experience == "3 - 6 years"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: height / 25.3,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 140),
-            child: Text('Languages known',
-                style: GoogleFonts.manrope(
-                    color: Color(0xff18353F),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: width / 19.6,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: language == "Tamil"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            language = "Tamil";
-                          });
-                        },
-                        child: Text(
-                          'Tamil',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: language == "Tamil"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: language == "English"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            language = "English";
-                          });
-                        },
-                        child: Text(
-                          'English',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: language == "English"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width / 39.2,
-                  ),
-                  Container(
-                    height: height / 18.97,
-                    width: width / 3.01,
-                    decoration: BoxDecoration(
-                        color: language == "Hindi"
-                            ? primaryColor
-                            : Colors.transparent,
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            language = "Hindi";
-                          });
-                        },
-                        child: Text(
-                          'Hindi',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: language == "Hindi"
-                                ? Colors.white
-                                : Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: height / 75.9,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 16.36),
             child: Row(
               children: [
-                Container(
-                  height: height / 18.97,
-                  width: width / 3.01,
-                  decoration: BoxDecoration(
-                      color: language == "Malayalam"
-                          ? primaryColor
-                          : Colors.transparent,
-                      border: Border.all(color: primaryColor),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          language = "Malayalam";
-                        });
-                      },
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Surgeons")) {
+                        selectedCategories.remove("Surgeons");
+                      } else {
+                        selectedCategories.add("Surgeons");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Surgeons")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
                       child: Text(
-                        'Malayalam',
+                        'Surgeons',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Surgeons")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Dentist")) {
+                        selectedCategories.remove("Dentist");
+                      } else {
+                        selectedCategories.add("Dentist");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Dentist")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'Dentist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Dentist")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Cardiologist")) {
+                        selectedCategories.remove("Cardiologist");
+                      } else {
+                        selectedCategories.add("Cardiologist");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Cardiologist")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Cardiologist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: language == "Malayalam"
+                          color: selectedCategories.contains("Cardiologist")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 16.36),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Artho")) {
+                        selectedCategories.remove("Artho");
+                      } else {
+                        selectedCategories.add("Artho");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Artho")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 94.25),
+                      child: Text(
+                        'Artho',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Artho")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Generalist")) {
+                        selectedCategories.remove("Generalist");
+                      } else {
+                        selectedCategories.add("Generalist");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Generalist")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'Generalist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Generalist")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Radiologist")) {
+                        selectedCategories.remove("Radiologist");
+                      } else {
+                        selectedCategories.add("Radiologist");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Radiologist")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'Radiologist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Radiologist")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              SizedBox(width: 13),
+              Padding(
+                padding: EdgeInsets.only(top: height / 50.26, left: width / 18),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("ENT specialist")) {
+                        selectedCategories.remove("ENT specialist");
+                      } else {
+                        selectedCategories.add('ENT specialist');
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 3.6,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains('ENT specialist')
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        'ENT specialist',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains('ENT specialist')
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: width / 39.2,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: height / 50.26,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedCategories.contains("Nuerologist")) {
+                        selectedCategories.remove("Nuerologist");
+                      } else {
+                        selectedCategories.add("Nuerologist");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 3.6,
+                    decoration: BoxDecoration(
+                        color: selectedCategories.contains("Nuerologist")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 107.71),
+                      child: Text(
+                        "Nuerologist",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCategories.contains("Nuerologist")
+                              ? Colors.white
+                              : Color(0xff2F649A).withOpacity(.7),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: height / 25.3,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: width / 2),
+            child: Text('Working Shift',
+                style: GoogleFonts.manrope(
+                    color: Color(0xff18353F),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 58, left: width / 72),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 12,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      type = "Day";
+                    });
+                  },
+                  child: Container(
+                    height: height / 25.13,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color:
+                            type == "Day" ? primaryColor : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 150.8),
+                      child: Text(
+                        'Day',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color:
+                              type == "Day" ? Colors.white : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      type = "Night";
+                    });
+                  },
+                  child: Container(
+                    height: height / 25.13,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color:
+                            type == "Night" ? primaryColor : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 150.8),
+                      child: Text(
+                        'Night',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: type == "Night"
                               ? Colors.white
                               : Color(0xff2F649A),
                         ),
@@ -835,30 +650,726 @@ class _SearchScreenState extends State<SearchScreen> {
                 SizedBox(
                   width: width / 39.2,
                 ),
-                Container(
-                  height: height / 18.97,
-                  width: width / 3.01,
-                  decoration: BoxDecoration(
-                      color: language == "Marathi"
-                          ? primaryColor
-                          : Colors.transparent,
-                      border: Border.all(color: primaryColor),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          language = "Marathi";
-                        });
-                      },
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      type = '24 Hours';
+                    });
+                  },
+                  child: Container(
+                    height: height / 25.13,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: type == '24 Hours'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 125.66),
+                      child: Text(
+                        '24 Hours',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: type == '24 Hours'
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: height / 25.3,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: width / 2.4),
+            child: Text('Work experience',
+                style: GoogleFonts.manrope(
+                    color: Color(0xff18353F),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 72),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 12,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      option = "0 - 1 Year";
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: option == "0 - 1 Year"
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        '0 - 1 Year',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: option == "0 - 1 Year"
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      option = '2 - 3 Years';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: option == '2 - 3 Years'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        '2 - 3 Years',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: option == '2 - 3 Years'
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 13.84),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      option = 'Above 3 years';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 3,
+                    decoration: BoxDecoration(
+                        color: option == 'Above 3 years'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Above 3 years',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: option == 'Above 3 years'
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      option = 'Above 6 years';
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 3,
+                    decoration: BoxDecoration(
+                        color: option == 'Above 6 years'
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Above 6 years',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: option == 'Above 6 years'
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: height / 25.3,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: width / 2.57),
+            child: Text('Languages known',
+                style: GoogleFonts.manrope(
+                    color: Color(0xff18353F),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 18),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 19.6,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Tamil")) {
+                        selectedLanguages.remove("Tamil");
+                      } else {
+                        selectedLanguages.add("Tamil");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Tamil")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Tamil',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Tamil")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("English")) {
+                        selectedLanguages.remove("English");
+                      } else {
+                        selectedLanguages.add("English");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("English")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'English',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("English")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Hindi")) {
+                        selectedLanguages.remove("Hindi");
+                      } else {
+                        selectedLanguages.add("Hindi");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Hindi")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Hindi',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Hindi")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: height / 75.9,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: width / 9),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Malayalam")) {
+                        selectedLanguages.remove("Malayalam");
+                      } else {
+                        selectedLanguages.add("Malayalam");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Malayalam")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Malayalam',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Malayalam")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Marathi")) {
+                        selectedLanguages.remove("Marathi");
+                      } else {
+                        selectedLanguages.add("Marathi");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Marathi")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
                       child: Text(
                         'Marathi',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.openSans(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: language == "Marathi"
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Marathi")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Gujarathi")) {
+                        selectedLanguages.remove("Gujarathi");
+                      } else {
+                        selectedLanguages.add("Gujarathi");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Gujarathi")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Gujarathi',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Gujarathi")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: height / 75.9,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: width / 9),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Bengali")) {
+                        selectedLanguages.remove("Bengali");
+                      } else {
+                        selectedLanguages.add("Bengali");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Bengali")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Bengali',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Bengali")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Kannada")) {
+                        selectedLanguages.remove("Kannada");
+                      } else {
+                        selectedLanguages.add("Kannada");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Kannada")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Kannada',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Kannada")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (selectedLanguages.contains("Telungu")) {
+                        selectedLanguages.remove("Telungu");
+                      } else {
+                        selectedLanguages.add("Telungu");
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: selectedLanguages.contains("Telungu")
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Telungu',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: selectedLanguages.contains("Telungu")
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: width / 1.8, top: height / 75.4),
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  if (selectedLanguages.contains("Urdu")) {
+                    selectedLanguages.remove("Urdu");
+                  } else {
+                    selectedLanguages.add("Urdu");
+                  }
+                });
+              },
+              child: Container(
+                height: height / 21.54,
+                width: width / 4.5,
+                decoration: BoxDecoration(
+                    color: selectedLanguages.contains("Urdu")
+                        ? primaryColor
+                        : Colors.transparent,
+                    border: Border.all(color: primaryColor),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding: EdgeInsets.only(top: height / 75.4),
+                  child: Text(
+                    'Urdu',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.openSans(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: selectedLanguages.contains("Urdu")
+                          ? Colors.white
+                          : Color(0xff2F649A),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: height / 25.3,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 23),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text('Gender',
+                  style: GoogleFonts.manrope(
+                      color: Color(0xff18353F),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height / 50.26, left: width / 18),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width / 19.6,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      gender = "Male";
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: gender == "Male"
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Male',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: gender == "Male"
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      gender = "Female";
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: gender == "Female"
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Female',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: gender == "Female"
+                              ? Colors.white
+                              : Color(0xff2F649A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: width / 39.2,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      gender = "Others";
+                    });
+                  },
+                  child: Container(
+                    height: height / 21.54,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                        color: gender == "Others"
+                            ? primaryColor
+                            : Colors.transparent,
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: height / 75.4),
+                      child: Text(
+                        'Others',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: gender == "Others"
                               ? Colors.white
                               : Color(0xff2F649A),
                         ),
@@ -874,13 +1385,29 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           InkWell(
             onTap: () {
-              setState(() {
+              if (profession != null &&
+                  type!= null &&
+
+                  selectedLanguages.isNotEmpty
+                  ) {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfileDetails()));
-              });
+                  MaterialPageRoute(
+                    builder: (context) => ListingPage(
+                      profession,
+                      selectedCategories,
+                      type,
+                      option,
+                      selectedLanguages,
+                      gender,
+                    ),
+                  ),
+                );
+              } else {
+                showToastMessage('Please select required options.');
+              }
             },
             child: Padding(
-              padding: const EdgeInsets.only(right: 15),
+              padding: EdgeInsets.only(right: width / 24),
               child: Container(
                 height: height / 16.86,
                 width: width / 1.17,
@@ -889,7 +1416,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: height / 75.4),
                   child: Text(
                     'Search',
                     textAlign: TextAlign.center,
@@ -909,5 +1436,18 @@ class _SearchScreenState extends State<SearchScreen> {
         ]),
       ),
     );
+  }
+
+  void showToastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message, //message to show toast
+        toastLength: Toast.LENGTH_LONG, //duration for message to show
+        gravity: ToastGravity.CENTER, //where you want to show, top, bottom
+        timeInSecForIosWeb: 1, //for iOS only
+        backgroundColor: Color(0xff2F649A), //background Color for message
+        textColor: Colors.white,
+        //message text color
+        fontSize: 16.0 //message font size
+        );
   }
 }

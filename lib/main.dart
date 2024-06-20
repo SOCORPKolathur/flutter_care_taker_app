@@ -1,20 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_care_taker_app/views/buynow.dart';
-import 'package:flutter_care_taker_app/views/chat_screen.dart';
-import 'package:flutter_care_taker_app/views/chatting_page.dart';
 import 'package:flutter_care_taker_app/views/demo.dart';
-import 'package:flutter_care_taker_app/views/first_screen.dart';
-import 'package:flutter_care_taker_app/views/prefferance_screen.dart';
-import 'package:flutter_care_taker_app/views/product_screen.dart';
-import 'package:flutter_care_taker_app/views/productdetail_screen.dart';
-import 'package:flutter_care_taker_app/views/profile_details.dart';
-import 'package:flutter_care_taker_app/views/searchscreen.dart';
+import 'package:flutter_care_taker_app/views/health_care_screen.dart';
+import 'package:flutter_care_taker_app/views/homepage.dart';
 import 'package:flutter_care_taker_app/views/splash_screen.dart';
-import 'package:flutter_care_taker_app/views/testdemo.dart';
+import 'package:flutter_care_taker_app/views/welcomeback_screen.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 
+import 'firebase_options.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  GeolocatorAndroid.registerWith();
+  GeolocatorPlatform.instance = GeolocatorAndroid();
 
-void main() {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -28,13 +32,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:SplashScreen(),
+      // home:CustomTable(),
+      home: Demo(),
     );
   }
 }
-
-

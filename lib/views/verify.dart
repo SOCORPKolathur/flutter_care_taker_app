@@ -5,6 +5,7 @@ import 'package:flutter_care_taker_app/views/health_care_screen.dart';
 import 'package:flutter_care_taker_app/views/phone_page.dart';
 import 'package:flutter_care_taker_app/views/success_page.dart';
 import 'package:flutter_care_taker_app/views/verification_successfull.dart';
+import 'package:flutter_care_taker_app/views/welcomeback_screen.dart';
 
 import 'package:flutterotpfield/flutterotpfield.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,18 +13,21 @@ import 'package:flutter_care_taker_app/Constants/colors.dart';
 
 import '../Widgets/custombutton.dart';
 
-class VerificationScreen extends StatefulWidget {
+class VerifyOtp extends StatefulWidget {
+  final String name;
+  final String aadhar;
   final String phonenumber;
-  VerificationScreen(this.phonenumber);
+
+  VerifyOtp(this.name, this.aadhar, this.phonenumber);
 
   @override
-  State<VerificationScreen> createState() => _VerificationScreenState();
+  State<VerifyOtp> createState() => _VerifyOtpState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _VerifyOtpState extends State<VerifyOtp> {
   sendOtp() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "${widget.phonenumber}",
+      phoneNumber: "+91${widget.phonenumber}",
       verificationCompleted: (PhoneAuthCredential credential) {
         print("Verification Complete");
       },
@@ -73,12 +77,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        right: width / 1.28,
-                        left: width / 36,
-                        top: height / 50.26),
+                    padding:
+                    EdgeInsets.only(right: width/1.28, left: width/36, top: height/50.26),
                     child: Container(
-                      width: width / 7.2,
+                      width: width/7.2,
                       height: height / 15.08,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
@@ -107,7 +109,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ),
                       ),
                       Padding(
-                        padding:  EdgeInsets.only(top:height/75.4, bottom: height/75.4),
+                        padding:  EdgeInsets.only(top: height/75.4, bottom: width/36),
                         child: Text('Happy CareTakers',
                             style: GoogleFonts.openSans(
                                 color: Color(0xffFFFFFF),
@@ -154,11 +156,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           fontSize: 14,
                           fontWeight: FontWeight.w700)),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => WelcomeBackScreen()));
+                      },
                       icon: Icon(
                         Icons.edit,
                         color: primaryColor,
-                      )),
+                      ),),
                 ],
               ),
               SizedBox(height: height / 37.95),
@@ -201,7 +206,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   verifyotp();
                 },
                 style: ElevatedButton.styleFrom(
-                  fixedSize: Size(340, 50),
+                  fixedSize: Size(width/1.05, height/15.08),
                   backgroundColor: primaryColor,
                 ),
                 child: Text(
@@ -230,16 +235,19 @@ class _VerificationScreenState extends State<VerificationScreen> {
       if (value.user != null) {
         print(FirebaseAuth.instance.currentUser!.uid);
 
-        FirebaseFirestore.instance
-            .collection("Person")
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({
-          "phone": widget.phonenumber,
-          "userid": FirebaseAuth.instance.currentUser!.uid,
-        });
-
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SuccessfullPage()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => VerificationSuccessfully(
+                widget.name,
+                widget.aadhar,
+                widget.phonenumber,
+                FirebaseAuth.instance.currentUser!.uid)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(' Successfully Verify OTP')),
+        );
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid OTP')),
+        );
       }
     });
   }

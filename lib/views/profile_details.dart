@@ -1,19 +1,33 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_care_taker_app/views/searchscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
+import 'package:image_picker/image_picker.dart';
 import 'navbar.dart';
 
 class ProfileDetails extends StatefulWidget {
-  const ProfileDetails({Key? key}) : super(key: key);
+  final String imageUrl;
+  final String name;
+  final String option;
+  final String docid;
+
+  ProfileDetails(
+    this.imageUrl,
+    this.name,
+    this.option,
+    this.docid,
+  );
 
   @override
   State<ProfileDetails> createState() => _ProfileDetailsState();
 }
 
 class _ProfileDetailsState extends State<ProfileDetails> {
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -29,7 +43,25 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 child: Image.asset('assets/Ellipse.png'),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50, left: 300),
+                padding:
+                    EdgeInsets.only(top: height / 15.08, left: width / 1.2),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => NavBar()));
+                  },
+                  child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.menu,
+                        color: Color(0xff2F649A),
+                        size: 30,
+                      )),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: height / 15.08, left: width / 24),
                 child: Container(
                   width: width / 7.84,
                   height: height / 16.86,
@@ -37,27 +69,16 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.white,
                   ),
-                  child:  IconButton(onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> NavBar()));
-                  }, icon: Icon(Icons.menu)),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.arrow_back)),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50, left: 15),
-                child: Container(
-                  width: width / 7.84,
-                  height: height / 16.86,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                  ),
-                  child: IconButton(onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
-                  }, icon: Icon(Icons.arrow_back)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 60, left: 95),
+                padding:
+                    EdgeInsets.only(top: height / 12.56, left: width / 3.78),
                 child: Text(
                   'Profile details',
                   style: GoogleFonts.openSans(
@@ -68,104 +89,72 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 120, left: 15),
+                padding: EdgeInsets.only(top: height / 6.28, left: width / 24),
                 child: Container(
-                    height: height / 3.79,
-                    width: width / 1.08,
+                    height: height / 7.54,
+                    width: width / 1.09,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Color(0xffECF5FF),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, top: 15),
-                          child: Stack(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 80,top: 15),
-                                    child: Text(
-                                      'Dr. David Green',
-                                      style: GoogleFonts.openSans(
-                                        color: Color(0xff18353F),
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 25),
-                                    child: Container(
-                                      height: height / 25.3,
-                                      width: width / 2.61,
-                                      child: Row(children: [
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.person, color: Color(0xff18353F).withOpacity(.6),size: 16,)),
-                                        Text(
-                                          'Nurologist',
-                                          style: GoogleFonts.openSans(
-
-                                            color: Color(0xff18353F).withOpacity(.6),
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                          ),
-                                        )
-                                      ]),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        AssetImage('assets/doctor_person.png'),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 200,bottom: 10
-                                    ),
-                                    child: Container(
-                                      height: height / 18.97,
-                                      width: width / 9.8,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.white,
-                                      ),
-                                      child: Icon(Icons.save),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(widget.imageUrl),
+                      ),
+                      title: Padding(
+                        padding: EdgeInsets.only(
+                            left: width / 18, top: height / 50.26),
+                        child: Text(
+                          widget.name,
+                          style: GoogleFonts.openSans(
+                            color: Color(0xff18353F),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, left: 6),
-                          child: Text(
-                              'Dr. David green is a board-certified neurologist with over 15 years of experience in diagnosing and treating neurological disorders',
-                            style:GoogleFonts.openSans(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: Color(0xff18353F).withOpacity(.8),
-                            ) ,
-                          textAlign: TextAlign.start,),
+                      ),
+                      subtitle: Padding(
+                        padding: EdgeInsets.only(right: width / 36),
+                        child: Container(
+                          height: height / 25.3,
+                          child: Row(children: [
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.person,
+                                  color: Color(0xff18353F).withOpacity(.6),
+                                  size: 16,
+                                )),
+                            Text(
+                              widget.option,
+                              style: GoogleFonts.openSans(
+                                color: Color(0xff18353F),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ]),
                         ),
-                      ],
+                      ),
+                      trailing: Container(
+                        height: height / 18.97,
+                        width: width / 9.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white,
+                        ),
+                        child: Icon(Icons.save),
+                      ),
                     )),
               )
             ],
           ),
           SizedBox(
-            height: height / 25.3,
+            height: height / 75.4,
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 220),
+            padding: EdgeInsets.only(right: width / 1.8, top: height / 37.7),
             child: Text(
               'Overview',
               style: GoogleFonts.openSans(
@@ -175,281 +164,448 @@ class _ProfileDetailsState extends State<ProfileDetails> {
               ),
             ),
           ),
-          Container(
-            height: height / 3.16, // Set the height here
-            width:
-                double.infinity,
-            // Set the width to occupy the available space
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Table(
-
-
-                border:
-                    TableBorder.all(
-                      color: Color(0xff18353F).withOpacity(.3),
-                      borderRadius: BorderRadius.circular(25),
-
-
-                    ),
-                children: [
-                  TableRow(children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 68),
-                          child: Text(
-                            'Work',
-                            style: GoogleFonts.openSans(
-                              color: Color(0xff18353F),
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15,
-                            top: 10,
-                            bottom: 5,
-                          ),
-                          child: Row(children: [
-                            Icon(
-                              Icons.person,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: width/39.2,
-                            ),
-                            Text(
-                              'Doctor',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, left: 10),
-                          child: Text(
-                            'Job category',
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff18353F),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 10, bottom: 6),
-                          child: Row(children: [
-                            Icon(
-                              Icons.person,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Nuerologist',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ]),
-                  TableRow(children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 15),
-                          child: Text(
-                            'Experience',
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff18353F),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 10, bottom: 6),
-                          child: Row(children: [
-                            Icon(
-                              Icons.calendar_today_rounded,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: width / 39.2,
-                            ),
-                            Text(
-                              '5 Years',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 13),
-                          child: Text(
-                            'Work type',
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff18353F),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 26, top: 10, bottom: 6),
-                          child: Row(children: [
-                            Icon(
-                              Icons.calendar_today,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: width / 39.2,
-                            ),
-                            Text(
-                              'Day',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ]),
-                  TableRow(children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 25),
-                          child: Text(
-                            'Language',
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff18353F),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 25, top: 10, bottom: 10),
-                          child: Row(children: [
-                            Icon(
-                              Icons.translate,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: width / 39.2,
-                            ),
-                            Text(
-                              'Tamil',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 25),
-                          child: Text(
-                            'Address',
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff18353F),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 26, top: 10, bottom: 10),
-                          child: Row(children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Color(0xff2F649A),
-                            ),
-                            SizedBox(
-                              width: width / 39.2,
-                            ),
-                            Text(
-                              'Chennai',
-                              style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff18353F).withOpacity(.4),
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
-                    ),
-                  ]),
-                ],
-              ),
+          FutureBuilder(
+            future: Future.delayed(
+              Duration(seconds: 2),
+              () => FirebaseFirestore.instance
+                  .collection("JobSeeking")
+                  .doc(widget.docid)
+                  .get(),
             ),
-          ),
-          SizedBox(
-            height: height / 8.43,
-          ),
-          Container(
-            height: height / 15.18,
-            width: width / 1.15,
-            decoration: BoxDecoration(
-              color: Color(0xff2F649A),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
-                'Contact ',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.openSans(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  color: Color(0xffFFFFFF),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: height /18.97 ,
-          ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Show a CircularProgressIndicator while the data is loading
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
+              if (snapshot.hasError) {
+                // Handle the error state
+                return Center(
+                  child: Text('An error occurred!'),
+                );
+              }
+
+              if (!snapshot.hasData || !snapshot.data!.exists) {
+                // Handle the case when there is no data
+                return Center(
+                  child: Text('No data available'),
+                );
+              }
+              Map<String, dynamic>? document = snapshot.data!.data();
+              List<dynamic> docLanguages = document!["language"];
+              List<dynamic> docCategories = document["category"];
+              if (widget.name == document!["name"]) {
+                return Padding(
+                  padding: EdgeInsets.only(top: height / 75.4),
+                  child: Container(
+                    height: height / 1.25, // Set the height here
+                    width: double.infinity,
+                    // Set the width to occupy the available space
+                    child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Table(
+                              border: TableBorder.all(
+                                color: Color(0xff18353F).withOpacity(.3),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              children: [
+                                TableRow(children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 37.7,
+                                            right: width / 12),
+                                        child: Text(
+                                          'Profession',
+                                          style: GoogleFonts.openSans(
+                                            color: Color(0xff18353F),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: width / 14.4,
+                                          top: height / 75.4,
+                                          bottom: height / 150.8,
+                                        ),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.person,
+                                            color: Color(0xff2F649A),
+                                          ),
+                                          SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            document["option"],
+                                            style: GoogleFonts.openSans(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xff18353F)
+                                                  .withOpacity(.4),
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 37.7,
+                                            right: width / 12),
+                                        child: Text(
+                                          'Experience',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 25,
+                                            top: height / 75.4,
+                                            bottom: height / 60),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.calendar_today_rounded,
+                                            color: Color(0xff2F649A),
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            document["Experience"],
+                                            style: GoogleFonts.openSans(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xff18353F)
+                                                  .withOpacity(.4),
+                                            ),
+                                          )
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                                TableRow(children: [
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 37.7,
+                                            right: width / 22.5,
+                                            left: 10),
+                                        child: Text(
+                                          'Working shift',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: width / 12,
+                                            top: height / 75.4,
+                                            bottom: height / 60),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.calendar_today,
+                                            color: Color(0xff2F649A),
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            document["available"],
+                                            style: GoogleFonts.openSans(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xff18353F)
+                                                  .withOpacity(.4),
+                                            ),
+                                          )
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 37.7, right: 50),
+                                        child: Text(
+                                          'Location',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            top: height / 75.4,
+                                            bottom: height / 75.4),
+                                        child: Row(children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: height / 37.7),
+                                            child: Icon(
+                                              Icons.location_on,
+                                              color: Color(0xff2F649A),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            width: width / 3.6,
+                                            height: height / 15.08,
+                                            child: Text(
+                                              document["location"],
+                                              style: GoogleFonts.openSans(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                color: Color(0xff18353F)
+                                                    .withOpacity(.4),
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                                TableRow(children: [
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 75.4,
+                                            right: width / 14.4),
+                                        child: Text(
+                                          'Language',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: width / 11.25,
+                                            top: height / 75.4),
+                                        child: Row(children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom: height / 37.7,
+                                            ),
+                                            child: Icon(
+                                              Icons.translate,
+                                              color: Color(0xff2F649A),
+                                              size: 20,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Container(
+                                            width: width / 3.78,
+                                            child: Text(
+                                              docLanguages.join(", "),
+                                              style: GoogleFonts.openSans(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                color: Color(0xff18353F)
+                                                    .withOpacity(.4),
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 75.4,
+                                            left: width / 14.4),
+                                        child: Text(
+                                          'Williking to Work Outstation?',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height / 75.4,
+                                            right: width / 4.8),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.person,
+                                                color: Color(0xff2F649A),
+                                              ),
+                                              SizedBox(
+                                                width: width / 72,
+                                              ),
+                                              Text(
+                                                document["prefer"],
+                                                style: GoogleFonts.openSans(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Color(0xff18353F)
+                                                      .withOpacity(.4),
+                                                ),
+                                              )
+                                            ]),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: width / 0.9,
+                              height: height / 7.54,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Color(0xff18353F).withOpacity(.3),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height / 75.4, right: width / 1.8),
+                                    child: Text(
+                                      'Job category',
+                                      style: GoogleFonts.openSans(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xff18353F),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width / 18, top: height / 37.7),
+                                    child: Row(children: [
+                                      Icon(
+                                        Icons.person,
+                                        color: Color(0xff2F649A),
+                                      ),
+                                      SizedBox(
+                                        width: width / 72,
+                                      ),
+                                      Container(
+                                        width: width / 1.28,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              for (var category
+                                                  in docCategories)
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 2),
+                                                  child: Container(
+                                                    width: width / 4,
+                                                    height: height / 30.16,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        border: Border.all(
+                                                          color: Color(
+                                                                  0xff18353F)
+                                                              .withOpacity(.3),
+                                                        )),
+                                                    child: Text(
+                                                      category.toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height / 25.13,
+                          ),
+                          Container(
+                            height: height / 15.18,
+                            width: width / 1.15,
+                            decoration: BoxDecoration(
+                              color: Color(0xff2F649A),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(top: height / 75.4),
+                              child: Text(
+                                'Contact ',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.openSans(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                  color: Color(0xffFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  height: height / 75.4,
+                );
+              }
+            },
+          ),
         ]),
       ),
     );

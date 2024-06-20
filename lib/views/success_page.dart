@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_care_taker_app/views/health_care_screen.dart';
+import 'package:flutter_care_taker_app/views/homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_care_taker_app/Constants/colors.dart';
-
 
 class SuccessfullPage extends StatefulWidget {
   const SuccessfullPage({Key? key}) : super(key: key);
@@ -28,31 +30,31 @@ class _SuccessfullPageState extends State<SuccessfullPage> {
                 alignment: Alignment.topCenter,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 200, top: 80),
+                    padding: EdgeInsets.only(right: width/1.8, top:height/9.42),
                     child: Container(
-                        height: height/18.97,
-                        width: width/9.8,
+                        height: height / 18.97,
+                        width: width / 9.8,
                         child: Image.asset('assets/success_tick.png')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 200, top: 80),
+                    padding:  EdgeInsets.only(left: width/1.8,top:height/9.42),
                     child: Container(
-                        height: height/18.97,
-                        width: width/9.8,
+                        height: height / 18.97,
+                        width: width / 9.8,
                         child: Image.asset('assets/success_tick.png')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
+                    padding:  EdgeInsets.only(
+                      top: height/37.7,
                     ),
                     child: Container(
-                        height: height/18.97,
-                        width: width/9.8,
+                        height: height / 18.97,
+                        width: width / 9.8,
                         child: Image.asset('assets/success_tick.png')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 40,
+                    padding:  EdgeInsets.only(
+                      top: height/18.85,
                     ),
                     child: Container(
                         width: width / 2.53,
@@ -60,8 +62,8 @@ class _SuccessfullPageState extends State<SuccessfullPage> {
                         child: Image.asset('assets/shield.png')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 40,
+                    padding:  EdgeInsets.only(
+                      top: height/18.85,
                     ),
                     child: Container(
                         width: width / 4.74,
@@ -83,19 +85,24 @@ class _SuccessfullPageState extends State<SuccessfullPage> {
                 style: TextStyle(color: Colors.grey),
               ),
               SizedBox(
-                height: height/37.95,
+                height: height / 37.95,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => HomePage()));
+                },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(340, 50),
                   backgroundColor: primaryColor,
                 ),
-                child: Text('Done',
-                    style: GoogleFonts.openSans(
-                        color: Color(0xffFFFFFF),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),),
+                child: Text(
+                  'Done',
+                  style: GoogleFonts.openSans(
+                      color: Color(0xffFFFFFF),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),

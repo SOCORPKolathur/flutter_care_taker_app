@@ -1,18 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_care_taker_app/views/productdetail_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../Constants/colors.dart';
 
 class BuyNowCart extends StatefulWidget {
-  const BuyNowCart({Key? key}) : super(key: key);
+  final String docid;
+  final String image;
+  final String name;
+  final int currentPrice;
+  final int counter;
+  final int productPrice;
+  final String description;
+
+  BuyNowCart(this.docid, this.image, this.name, this.currentPrice, this.counter,
+      this.productPrice, this.description);
+
+  // Rest of your BuyNowCart widget implementation
 
   @override
   State<BuyNowCart> createState() => _BuyNowCartState();
 }
 
 class _BuyNowCartState extends State<BuyNowCart> {
-  int _counter = 0;
+  int deliveryCharge = 50; // Delivery charge
+  late int
+      totalPrice; // Total price including product price and delivery charge
+
+  @override
+  void initState() {
+    super.initState();
+    totalPrice = widget.currentPrice + deliveryCharge;
+    getdocid();
+  }
+
+  String? UID;
+
+  getdocid() async {
+    var user = await FirebaseFirestore.instance.collection("Person").get();
+    for (int i = 0; i < user.docs.length; i++) {
+      if (user.docs[i]["userid"] == FirebaseAuth.instance.currentUser!.uid) {
+        setState(() {
+          UID = user.docs[i].id;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +67,7 @@ class _BuyNowCartState extends State<BuyNowCart> {
                 child: Image.asset('assets/Ellipse.png'),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50, left: 15),
+                padding: EdgeInsets.only(top: height / 15.08, left: width / 24),
                 child: Container(
                   width: width / 7.84,
                   height: height / 16.86,
@@ -38,16 +76,17 @@ class _BuyNowCartState extends State<BuyNowCart> {
                     color: Colors.white,
                   ),
                   child: IconButton(
-                      onPressed: () {Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context)=>ProductDetailScreen("Ima")));
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
                       icon: Icon(Icons.arrow_back)),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 60, left: 130),
+                padding:
+                    EdgeInsets.only(top: height / 12.56, left: width / 2.4),
                 child: Text(
-                  'My Cart',
+                  'Orders',
                   style: GoogleFonts.openSans(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
@@ -58,240 +97,226 @@ class _BuyNowCartState extends State<BuyNowCart> {
             ],
           ),
           SizedBox(
-            height: height/25.3,
+            height: height / 25.3,
           ),
           SingleChildScrollView(
             child: Column(
               children: [
                 ListTile(
                   leading: Container(
-                      height: height/12.65,
-                      width: width/6.53,
-                      decoration: BoxDecoration(
-                        color: Color(0xffECF5FF),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Image.asset('assets/walking_stick.png')),
+                    height: height / 9.42,
+                    width: width / 4.5,
+                    decoration: BoxDecoration(
+                      color: Color(0xffECF5FF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Image.network(widget.image),
+                  ),
                   title: Text(
-                    'MCP Folding Walking ',
+                    widget.name,
                     style: GoogleFonts.openSans(
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: Color(0xff18353F)),
                   ),
-                  subtitle: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 115),
-                        child: Text(
-                          'Stick - Silver',
-                          style: GoogleFonts.openSans(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xff18353F)),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 165),
-                        child: Text(
-                          '₹ 395',
-                          style: GoogleFonts.openSans(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xff2F649A)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Container(
-                        height: height/25.3,
-                        width: width/13.06,
-                        decoration: BoxDecoration(
-                          color: Color(0xffECF5FF),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.close,
-                              size: 15,
-                            ))),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(),
-                        child: CircleAvatar(
-                          backgroundColor: Color(0xff2F649A),
-                          radius: 15,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _counter--;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.remove,
-                                size: 15,
-                                color: Color(0xffFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Text(
-                          '$_counter',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 20,
-                            color: Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(),
-                        child: CircleAvatar(
-                          backgroundColor: Color(0xff2F649A),
-                          radius: 15,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _counter++;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.add,
-                                size: 15,
-                                color: Color(0xffFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width/19.6,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 130),
-                        child: Text(
-                          '₹ 790/-',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20,
-                            color: Color(0xff2F649A),
-                          ),
-                        ),
-                      ),
-                    ],
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(right: width / 3.13),
+                    child: Text(
+                      'Stick - Silver',
+                      style: GoogleFonts.openSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xff18353F)),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: height/7.59,
+                  height: height / 9.42,
                 ),
-                Container(
-                  height: height/13.8,
-                  width: width/1.15,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: primaryColor)),
+                Align(
+                  alignment: Alignment.topLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Text('Shop more',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.openSans(
-                            color: primaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 80, left: 5),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: Text(
-                          'Product price',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: Color(0xff18353F).withOpacity(.5),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width/16.86,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 150),
-                        child: Text(
-                          '₹ 790',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 14,
-                            color: Color(0xff2F649A).withOpacity(.8),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 5),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: Text(
-                          'Delivery charges',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: Color(0xff18353F).withOpacity(.5),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width:width/9.8,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 120),
-                        child: Text(
-                          '₹ 50',
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 14,
-                            color: Color(0xff2F649A).withOpacity(.8),
-                          ),
-                        ),
-                      )
-                    ],
+                    padding: EdgeInsets.only(left: width / 18),
+                    child: Text(
+                      "Order Details :-",
+                      style: GoogleFonts.openSans(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: height/37.95,
-                  width: width/1.05,
+                  height: height / 75.4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: width / 18),
+                        child: Text(
+                          "Product Name ",
+                          style: GoogleFonts.openSans(
+                              fontSize: 16,
+                              color: Color(0xff18353F).withOpacity(.5),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: width / 12,
+                    ),
+                    Text(
+                      ":",
+                      style: GoogleFonts.openSans(
+                          fontSize: 20,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: width / 18,
+                    ),
+                    Text(
+                      widget.name,
+                      style: GoogleFonts.openSans(
+                          fontSize: 16,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: height / 75.4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: width / 18),
+                        child: Text(
+                          "QTY",
+                          style: GoogleFonts.openSans(
+                              fontSize: 16,
+                              color: Color(0xff18353F).withOpacity(.5),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: width / 3,
+                    ),
+                    Text(
+                      ":",
+                      style: GoogleFonts.openSans(
+                          fontSize: 20,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: width / 18,
+                    ),
+                    Text(
+                      widget.counter.toString(),
+                      style: GoogleFonts.openSans(
+                          fontSize: 16,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: height / 75.4,
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: width / 18),
+                      child: Text(
+                        'Product price:',
+                        style: GoogleFonts.openSans(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: Color(0xff18353F).withOpacity(.5),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: width / 9.47),
+                    Text(
+                      ":",
+                      style: GoogleFonts.openSans(
+                          fontSize: 20,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: width / 18,
+                    ),
+                    Text(
+                      "₹ ${widget.currentPrice.toString()}",
+                      style: GoogleFonts.openSans(
+                          fontSize: 16,
+                          color: Color(0xff18353F).withOpacity(.5),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: height / 75.4,
+                ),
+                // Padding(
+                //   padding: EdgeInsets.only(left: width / 18),
+                //   child: Row(
+                //     children: [
+                //       Text(
+                //         'Delivery charges',
+                //         style: GoogleFonts.openSans(
+                //           fontWeight: FontWeight.w700,
+                //           fontSize: 16,
+                //           color: Color(0xff18353F).withOpacity(.5),
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         width: width / 20,
+                //       ),
+                //       Text(
+                //         ":",
+                //         style: GoogleFonts.openSans(
+                //             fontSize: 20,
+                //             color: Color(0xff18353F).withOpacity(.5),
+                //             fontWeight: FontWeight.bold),
+                //       ),
+                //       SizedBox(
+                //         width: width / 18,
+                //       ),
+                //       Text(
+                //         "₹ ${deliveryCharge.toString()}",
+                //         style: GoogleFonts.openSans(
+                //             fontSize: 16,
+                //             color: Color(0xff18353F).withOpacity(.5),
+                //             fontWeight: FontWeight.bold),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: height / 75.4,
+                // ),
+                SizedBox(
+                  height: height / 37.95,
+                  width: width / 1.05,
                   child: Divider(
-                    color: Color(0xff2F649A).withOpacity(.4),
+                    color: Color(0xff2F649A),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 10),
+                  padding:
+                      EdgeInsets.only(top: height / 75.4, left: width / 36),
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 4),
+                        padding: EdgeInsets.only(left: width / 90),
                         child: Text(
                           'Total price',
                           style: GoogleFonts.openSans(
@@ -302,12 +327,12 @@ class _BuyNowCartState extends State<BuyNowCart> {
                         ),
                       ),
                       SizedBox(
-                        width: width/5.22,
+                        width: width / 5.22,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 125),
+                        padding: EdgeInsets.only(left: width / 2.88),
                         child: Text(
-                          '₹ 840',
+                          "₹ ${widget.currentPrice.toString()}",
                           style: GoogleFonts.openSans(
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
@@ -322,30 +347,74 @@ class _BuyNowCartState extends State<BuyNowCart> {
             ),
           ),
           SizedBox(
-            height: height/25.3,
+            height: height / 9.42,
           ),
-          Container(
-            height: height/15.18,
-            width: width/1.18,
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Checkout',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                      color: Color(0xffFFFFFF),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600)),
+          InkWell(
+            onTap: () {
+              if (FirebaseAuth.instance.currentUser != null) {
+                FirebaseFirestore.instance
+                    .collection("Person")
+                    .doc(UID)
+                    .collection("MyOrders")
+                    .doc(widget.docid)
+                    .set({
+                  "name": widget.name,
+                  "price": widget.currentPrice,
+                  "image": widget.image,
+                  "count": widget.counter.toString(),
+                  "productprice": "₹ ${widget.currentPrice.toString()}",
+                  "totalprice": "₹ ${totalPrice.toString()}",
+                });
+
+                showTopSnackBar(
+                  Overlay.of(context),
+                  CustomSnackBar.success(
+                    backgroundColor:Color(0xff2F649A),
+
+                    message:
+                    'Item added to orders',
+                  ),
+                );
+              } else {
+                showToastMessage('Please login to add items to the Orders');
+              }
+            },
+            child: Container(
+              height: height / 15.18,
+              width: width / 1.18,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Checkout',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.openSans(
+                        color: Color(0xffFFFFFF),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600)),
+              ),
             ),
           ),
           SizedBox(
-            height: 40,
+            height: height / 18.85,
           ),
         ]),
       ),
     );
+  }
+
+  void showToastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message, //message to show toast
+        toastLength: Toast.LENGTH_LONG, //duration for message to show
+        gravity: ToastGravity.CENTER, //where you want to show, top, bottom
+        timeInSecForIosWeb: 1, //for iOS only
+        backgroundColor: Color(0xff2F649A), //background Color for message
+        textColor: Colors.white,
+        //message text color
+        fontSize: 16.0 //message font size
+        );
   }
 }

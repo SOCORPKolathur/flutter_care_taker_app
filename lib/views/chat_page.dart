@@ -7,14 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'chatting_page.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+class ChatPage extends StatefulWidget {
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -31,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Image.asset('assets/Ellipse.png'),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(top: height/12.56, left: width/60.58),
+                  padding:  EdgeInsets.only(top: height/12.56, left: width/10.28),
                   child: Text(
                     'Chats',
                     style: GoogleFonts.openSans(
@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     color: Colors.grey,
                                   )),
                               Padding(
-                                padding:  EdgeInsets.only(left: width/180),
+                                padding: EdgeInsets.only(left: width/180),
                                 child: Text(
                                   'Search here...',
                                   style: GoogleFonts.openSans(
@@ -127,18 +127,21 @@ class _ChatScreenState extends State<ChatScreen> {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           var document = snapshot.data!.docs[index];
-                          return  Column(
+                          return Column(
                             children: [
                               ListTile(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChattingPage(document["imageUrl"],document["name"], document["option"], document['userid'])));
+                                      builder: (context) => ChattingPage(
+                                          document["imageUrl"],
+                                          document["name"],
+                                          document["option"],
+                                          document['userid'])));
                                 },
                                 leading: CircleAvatar(
                                   radius: 25,
                                   backgroundImage:
-                                  NetworkImage(document["imageUrl"]),
+                                      NetworkImage(document["imageUrl"]),
                                 ),
                                 title: Text(
                                   document["name"],
@@ -157,7 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                                 trailing: Padding(
-                                  padding:  EdgeInsets.only(bottom: height/0.02),
+                                  padding:  EdgeInsets.only(bottom: height/37.7),
                                   child: Text('12:34 pm'),
                                 ),
                               ),
@@ -169,7 +172,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         }),
                   );
                 }),
-
             SizedBox(
               height: height / 37.95,
             ),

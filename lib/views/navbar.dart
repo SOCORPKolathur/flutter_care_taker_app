@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_care_taker_app/views/prefferance_screen.dart';
+import 'package:flutter_care_taker_app/views/homepage.dart';
 import 'package:flutter_care_taker_app/views/profile_details.dart';
 import 'package:flutter_care_taker_app/views/searchscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +42,7 @@ class _NavBarState extends State<NavBar> {
         ListTile(
           title: Text('Prefference Screen'),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PrefferenceScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> HomePage()));
           },
         ),
         ListTile(
@@ -54,7 +54,7 @@ class _NavBarState extends State<NavBar> {
         ListTile(
           title: Text('Profile Screen'),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ProfileDetails()));
+            Navigator.of(context).pop();
           },
         )
       ],

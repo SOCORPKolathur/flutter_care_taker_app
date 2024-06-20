@@ -1,14 +1,7 @@
-import 'dart:ffi';
-
-import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_care_taker_app/Constants/colors.dart';
-import 'package:flutter_care_taker_app/views/first_screen.dart';
-import 'package:flutter_care_taker_app/views/navbar.dart';
 import 'package:flutter_care_taker_app/views/productdetail_screen.dart';
-import 'package:flutter_care_taker_app/views/profile_details.dart';
-import 'package:flutter_care_taker_app/views/role_page.dart';
-import 'package:flutter_care_taker_app/views/searchscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -19,41 +12,36 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  List NameProduct = [
-    "Aluminium walking Strick",
-    "Senior citizens chair red",
-    "Tourist walking stick",
-    "Tourist walking stick",
-    "Tourist walking stick",
-    "Bathroom safety products "
-  ];
-  List Product = [
-    " stick",
-    "red",
-  ];
-  List Price = ["₹ 1588", "₹ 4338", "₹ 1588", "₹ 4338", "₹ 4338", "₹ 1588",];
-  List Ima = [
-    "assets/walking_stick.png",
-    "assets/flat_char.png",
-    "assets/bluestrick.png",
-    "assets/fold_walking.png",
-    "assets/Group 80.png",
-    "assets/char.png",
-  ];
+  List NameProduct = [];
+  List Product = [];
+  List Price = [];
+  List Ima = [];
 
   int _selectedIndex = 0;
-  String option = " All";
+  String option = "All";
+  String searchQuery = "";
 
   late final PageController _pageController;
 
   @override
   void initState() {
     _pageController = PageController(initialPage: _selectedIndex);
-
     super.initState();
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  List<String> countries = [
+    'United States',
+    'Canada',
+    'India',
+    'Australia',
+    'United Kingdom',
+    'Germany',
+    // Add more countries...
+  ];
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -61,54 +49,6 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       key: _key,
-      endDrawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                'CareTaker',
-                style: GoogleFonts.openSans(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
-              ),
-              accountEmail: Text('Version 0.1'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/Frame.png'),
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                  image: AssetImage('assets/background_images.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('Prefference Screen'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProductScreen()));
-              },
-            ),
-            ListTile(
-              title: Text('Search Screen'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SearchScreen()));
-              },
-            ),
-            ListTile(
-              title: Text('Profile Screen'),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfileDetails()));
-              },
-            )
-          ],
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (val) {
@@ -126,7 +66,8 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: Image.asset('assets/Ellipse.png'),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 46, left: 300),
+                    padding:
+                        EdgeInsets.only(top: height / 16.39, left: width / 1.2),
                     child: Container(
                       width: width / 7.12,
                       height: height / 15.18,
@@ -136,106 +77,100 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       child: IconButton(
                           onPressed: () {
-                            _key.currentState!.openEndDrawer();
+                            //  _key.currentState!.openEndDrawer();
                           },
-                          icon: Icon(Icons.menu)),
+                          icon: Icon(
+                            Icons.shopping_cart,
+                            color: Color(0xff2F649A),
+                          )),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 35, left: 15),
+                    padding: EdgeInsets.only(top: 50, left: width / 24),
                     child: Text(
-                      ' Hello , Bharath',
+                      'Buy your necessary\n things here,',
                       style: GoogleFonts.openSans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: Color(0xffFFFFFF).withOpacity(.6),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 65, left: 15),
-                    child: Text(
-                      ' Buy your neccessary\n things here,',
-                      style: GoogleFonts.openSans(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color(0xffFFFFFF),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 130, left: 10),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: width / 19.6,
+                    padding: EdgeInsets.only(top: height / 5.8, left: 25),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          // Your onTap logic here
+                        });
+                      },
+                      child: Container(
+                        height: height / 16.86,
+                        width: width / 1.2,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.grey.shade100,
                         ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SearchScreen()));
-                            });
-                          },
-                          child: Container(
-                            height: height / 16.86,
-                            width: width / 1.45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.grey.shade100,
-                            ),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.search,
-                                      color: Colors.grey,
-                                    )),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 2),
-                                  child: Text(
-                                    'Search here...',
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff18353F),
-                                    ),
-                                  ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: width / 180),
+                          child: TextFormField(
+                            autofocus: true,
+                            controller: _controller,
+                            onChanged: (value) {
+                              setState(() {
+                                searchQuery = value.toLowerCase();
+                              });
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.search_rounded),
+                              hintText: "Search here...",
+                              contentPadding: EdgeInsets.only(top: 10),
+                              hintStyle: GoogleFonts.openSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xff18353F),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey
+                                      .shade300, // Adjust border color here
+                                  width: 2.0, // Adjust border width here
                                 ),
-                              ],
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey
+                                      .shade300, // Adjust border color here
+                                  width: 2.0, // Adjust border width here
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey
+                                      .shade300, // Adjust border color here
+                                  width: 2.0, // Adjust border width here
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: width / 19.6,
-                        ),
-                        Container(
-                          height: height / 15.18,
-                          width: width/7.12,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Image.asset('assets/Slider.png'),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
               ),
               SizedBox(
-                height: height /25.3,
+                height: height / 25.3,
               ),
               Column(
                 children: [
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 25),
+                      padding: EdgeInsets.only(top: height / 30.16),
                       child: Row(
                         children: [
                           SizedBox(
@@ -263,9 +198,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                         : Color(0xff2F649A),
                                   ),
                                 ),
-                                // SizedBox(
-                                //   width: width/9.2,
-                                // ),
                                 InkWell(
                                   onTap: () {
                                     setState(() {
@@ -293,7 +225,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             height: height / 18.97,
                             width: width / 3.01,
                             decoration: BoxDecoration(
-                                color: option == "Baby"
+                                color: option == "baby"
                                     ? primaryColor
                                     : Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(20)),
@@ -306,7 +238,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   width: width / 16.33,
                                   child: Image.asset(
                                     'assets/Sleeping Baby.png',
-                                    color: option == "Baby"
+                                    color: option == "baby"
                                         ? Colors.white
                                         : Color(0xff2F649A),
                                   ),
@@ -314,7 +246,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      option = "Baby";
+                                      option = "baby";
                                     });
                                   },
                                   child: Text(
@@ -323,7 +255,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     style: GoogleFonts.openSans(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: option == "Baby"
+                                      color: option == "baby"
                                           ? Colors.white
                                           : Color(0xff2F649A).withOpacity(.5),
                                     ),
@@ -339,7 +271,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             height: height / 18.97,
                             width: width / 3.01,
                             decoration: BoxDecoration(
-                                color: option == "Senior"
+                                color: option == "senior"
                                     ? primaryColor
                                     : Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(20)),
@@ -352,7 +284,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   width: width / 16.33,
                                   child: Image.asset(
                                     'assets/Elderly Person.png',
-                                    color: option == "Senior"
+                                    color: option == "senior"
                                         ? Colors.white
                                         : Color(0xff2F649A),
                                   ),
@@ -360,7 +292,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      option = "Senior";
+                                      option = "senior";
                                     });
                                   },
                                   child: Text(
@@ -369,7 +301,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     style: GoogleFonts.openSans(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 16,
-                                      color: option == "Senior"
+                                      color: option == "senior"
                                           ? Colors.white
                                           : Color(0xff2F649A).withOpacity(.5),
                                     ),
@@ -386,98 +318,150 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: height/25.3,
+                    height: height / 25.3,
                   ),
-                  GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 4 / 5),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: Ima.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15,left: 20),
-                          child: Container(
-                            width: width/1.26,
-                            height: height/4.46,
-
-                            decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ProductDetailScreen("Ima")));
-                                  },
-                                  child: Stack(
-                                    alignment: Alignment.topRight,
+                  StreamBuilder(
+                      stream: option == 'All'
+                          ? (searchQuery.isEmpty
+                              ? FirebaseFirestore.instance
+                                  .collection("Product")
+                                  .snapshots()
+                              : FirebaseFirestore.instance
+                                  .collection("Product")
+                                  .where('name',
+                                      isGreaterThanOrEqualTo:
+                                          searchQuery.toLowerCase())
+                                  .where('name',
+                                      isLessThanOrEqualTo:
+                                          searchQuery.toLowerCase() + '\uf8ff')
+                                  .snapshots())
+                          : (searchQuery.isEmpty
+                              ? FirebaseFirestore.instance
+                                  .collection("Product")
+                                  .where('for', isEqualTo: option)
+                                  .snapshots()
+                              : FirebaseFirestore.instance
+                                  .collection("Product")
+                                  .where('for', isEqualTo: option)
+                                  .where('name',
+                                      isGreaterThanOrEqualTo:
+                                          searchQuery.toLowerCase())
+                                  .where('name',
+                                      isLessThanOrEqualTo:
+                                          searchQuery.toLowerCase() + '\uf8ff')
+                                  .snapshots()),
+                      builder: (context, snapshots) {
+                        if (!snapshots.hasData)
+                          return CircularProgressIndicator();
+                        return GridView.builder(
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2, childAspectRatio: 4 / 5),
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshots.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var product = snapshots.data!.docs[index];
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    right: width / 24, left: width / 18),
+                                child: Container(
+                                  width: width / 1.26,
+                                  height: height / 4.46,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                          width: width/1.86,
-                                          height: height/4.97,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffECF5FF),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Image.asset(Ima[index]),
-                                          )),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            height: height/25.97,
-                                            width: width/13.8,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
-                                              color: Color(0xff2F649A),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProductDetailScreen(
+                                                          product['image'],
+                                                          product.id,
+                                                          product['name'],
+                                                          product['price'],
+                                                          product[
+                                                              'description'])));
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.topRight,
+                                          children: [
+                                            Container(
+                                                width: width / 1.86,
+                                                height: height / 6.2,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xffECF5FF),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: height / 37.7,
+                                                      right: width / 18),
+                                                  child: Image.network(
+                                                      product['image']),
+                                                )),
+                                            Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Container(
+                                                  height: height / 25.97,
+                                                  width: width / 13.8,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    color: Color(0xff2F649A),
+                                                  ),
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.bookmark,
+                                                      color: Colors.white,
+                                                      size: 17,
+                                                    ),
+                                                  )),
                                             ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.bookmark,
-                                                color: Colors.white,
-                                                size: 17,
-                                              ),
-                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: width / 36,
+                                            top: height / 188.5),
+                                        child: Text(
+                                          product['name'],
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff18353F),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: width / 36,
+                                        ),
+                                        child: Text(
+                                          "₹ ${product['price'].toString()}",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xff2F649A),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10.0,top: 4),
-                                  child: Text(
-                                    NameProduct[index],
-                                    style: GoogleFonts.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xff18353F),
-                                  ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left:10,right: 0),
-                                  child: Text(
-                                    Price[index],
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xff2F649A),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-
+                              );
+                            });
+                      })
                 ],
               ),
             ]),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_care_taker_app/Widgets/custombutton.dart';
-import 'package:flutter_care_taker_app/views/demo.dart';
+import 'package:flutter_care_taker_app/views/profile_setup_screen.dart';
 import 'package:flutter_care_taker_app/views/health_care_screen.dart';
-import 'package:flutter_care_taker_app/views/prefferance_screen.dart';
+import 'package:flutter_care_taker_app/views/homepage.dart';
+import 'package:flutter_care_taker_app/views/welcomeback_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_care_taker_app/Constants/colors.dart';
-
-
 
 class RolePageScreen extends StatefulWidget {
   const RolePageScreen({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                           print(height);
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.only(top: height / 37.7),
                           child: CircleAvatar(
                             radius: 50,
                             backgroundImage: AssetImage('assets/Frame.png'),
@@ -58,7 +58,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 10),
+                        padding: EdgeInsets.only(top: height / 75.4),
                         child: Text('Happy CareTakers',
                             style: GoogleFonts.openSans(
                                 color: Color(0xffFFFFFF),
@@ -66,17 +66,18 @@ class _RolePageScreenState extends State<RolePageScreen> {
                                 fontWeight: FontWeight.w700)),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.only(top: height / 37.7),
                         child: Container(
-                            width: width/1.4,
-                            height: height/3.45,
+                            width: width / 1.4,
+                            height: height / 3.45,
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
                                 Image.asset('assets/Vector.png'),
                                 Container(
-                                    width: width/1.96,
-                                    child: Image.asset('assets/Select-bro.png')),
+                                    width: width / 1.96,
+                                    child:
+                                        Image.asset('assets/Select-bro.png')),
                               ],
                             )),
                       ),
@@ -92,31 +93,30 @@ class _RolePageScreenState extends State<RolePageScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(top: height / 75.4),
                 child: Text(
                   'Select the option that best describes you',
-                  style:GoogleFonts.openSans(
+                  style: GoogleFonts.openSans(
                     color: Colors.grey,
                     fontSize: 15,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30, left: 30),
+                padding: EdgeInsets.only(top: height / 25.13, left: width / 12),
                 child: Row(
                   children: [
                     GestureDetector(
                       onTap: () {
                         setState(() {
                           option = "job";
-
                         });
                       },
                       child: Stack(
                         children: [
                           Container(
-                            width: width/2.61,
-                            height: height/5.06,
+                            width: width / 2.61,
+                            height: height / 5.06,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                   color: option == "job"
@@ -128,7 +128,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 20),
+                                  padding: EdgeInsets.only(top: height / 37.7),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: SizedBox.fromSize(
@@ -141,7 +141,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: EdgeInsets.only(top: height / 75.4),
                                   child: Text(
                                     'Looking for a job',
                                     style: GoogleFonts.openSans(
@@ -159,7 +159,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: width/19.6,
+                      width: width / 19.6,
                     ),
                     Stack(
                       children: [
@@ -170,8 +170,8 @@ class _RolePageScreenState extends State<RolePageScreen> {
                             });
                           },
                           child: Container(
-                            width: width/2.61,
-                            height: height/5.06,
+                            width: width / 2.61,
+                            height: height / 5.06,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                   color: option == "person"
@@ -183,7 +183,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 20),
+                                  padding: EdgeInsets.only(top: height / 37.7),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: SizedBox.fromSize(
@@ -196,7 +196,7 @@ class _RolePageScreenState extends State<RolePageScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: EdgeInsets.only(top: height / 75.4),
                                   child: Text(
                                     'Looking for a\n  Person',
                                     style: GoogleFonts.openSans(
@@ -217,21 +217,60 @@ class _RolePageScreenState extends State<RolePageScreen> {
                 ),
               ),
               SizedBox(
-                height: height/30.36,
+                height: height / 30.36,
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: ElevationButton("Continue",
-
-                    option == "person" ?
-
-                    HealthCareScreen() : ProfileSetUpScreen()),
+                padding: EdgeInsets.only(bottom: height / 37.7),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff2F649A),
+                      fixedSize: Size(300, 35)),
+                  onPressed: () {
+                    if (option == "person") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HealthCareScreen()),
+                      );
+                    } else if (option == "job") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomeBackScreen()),
+                      );
+                    } else {
+                      showToastMessage("Choose the Role");
+                      print("success");
+                    }
+                  },
+                  child: Text(
+                    "Continue",
+                    style: GoogleFonts.openSans(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
               ),
-
             ],
           ),
         ),
       ),
     );
+  }
+
+  //create this function, so that, you needn't to configure toast every time
+  void showToastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message, //message to show toast
+        toastLength: Toast.LENGTH_LONG, //duration for message to show
+        gravity: ToastGravity.CENTER, //where you want to show, top, bottom
+        timeInSecForIosWeb: 1, //for iOS only
+        backgroundColor: Color(0xff2F649A), //background Color for message
+        textColor: Colors.white,
+        //message text color
+        fontSize: 16.0 //message font size
+        );
   }
 }
